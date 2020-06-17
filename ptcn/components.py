@@ -17,6 +17,7 @@ class TemporalResidualBlock(tf.keras.Model):
             kernel_size: int = 3,
             padding_type: str = 'causal',
             dropout_rate: float = 0.2,
+            final_activation: str = 'relu',
             random_seed: int = DEFAULT_RANDOM_SEED
     ):
         """Residual Block for TemporalConvNet
@@ -37,6 +38,7 @@ class TemporalResidualBlock(tf.keras.Model):
         assert dilation in np.logspace(0, 20, num=21, base=2), "Value of 'dilation' parameter must be a power of 2"
         assert padding_type in PERMITTED_PADDING_TYPES, f"Value of 'padding_type' parameter must be one of {PERMITTED_PADDING_TYPES}"
         assert 0. < dropout_rate < 1., r"Value of 'dropout_rate' parameter must lie inside the range (0., 1.)"
+        assert final_activation in ['relu', 'linear', 'sigmoid']
 
         # Gaussian parameter initialisations
         initialiser = tf.keras.initializers.RandomNormal(mean=0.0, stddev=0.01, seed=self.random_seed)
@@ -81,7 +83,7 @@ class TemporalResidualBlock(tf.keras.Model):
         )
 
         # End-of-block activation (incorporates the skip connection)
-        self.final_activation = layers.Activation('relu')
+        self.final_activation = layers.Activation(final_activation)
 
     def call(self, inputs, training=None, mask=None):
         initial_inputs = inputs
