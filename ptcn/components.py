@@ -8,7 +8,7 @@ from ptcn.constants import DEFAULT_RANDOM_SEED
 PERMITTED_PADDING_TYPES = ['valid', 'causal', 'same']
 
 
-class TemporalResidualBlock(tf.keras.Model):
+class TemporalResidualBlock(tf.keras.layers.Layer):
 
     def __init__(
             self,
@@ -18,6 +18,7 @@ class TemporalResidualBlock(tf.keras.Model):
             padding_type: str = 'causal',
             dropout_rate: float = 0.2,
             final_activation: str = 'relu',
+            name: str = 'TemporalResBlock',
             random_seed: int = DEFAULT_RANDOM_SEED
     ):
         """Residual Block for TemporalConvNet
@@ -29,7 +30,7 @@ class TemporalResidualBlock(tf.keras.Model):
         :param dropout_rate:
         :param random_seed:
         """
-        super(TemporalResidualBlock, self).__init__()
+        super(TemporalResidualBlock, self).__init__(name=name)
 
         # Set the random seed
         self.random_seed = random_seed

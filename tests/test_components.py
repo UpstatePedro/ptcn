@@ -5,9 +5,9 @@ import tensorflow as tf
 from ptcn.components import TemporalResidualBlock
 
 
-def test_initialise_TemporalResidualBlock_is_keras_model():
-    residual_block = TemporalResidualBlock(dilation=2, n_filters=5)
-    assert isinstance(residual_block, tf.keras.Model)
+# def test_initialise_TemporalResidualBlock_is_keras_model():
+#     residual_block = TemporalResidualBlock(dilation=2, n_filters=5)
+#     assert isinstance(residual_block, tf.keras.Model)
 
 
 def test_initialise_TemporalResidualBlock_invalid_dilation():

@@ -7,6 +7,11 @@ from ptcn.constants import DEFAULT_RANDOM_SEED
 
 
 class GenericTemporalConvNet(tf.keras.Model):
+    problem_type_activations = {
+        "generic": "relu",
+        "regression": "linear",
+        "classification": "sigmoid"
+    }
 
     def __init__(
             self,
@@ -32,30 +37,38 @@ class GenericTemporalConvNet(tf.keras.Model):
         # TODO: validate n_filters
         assert problem_type in ['generic', 'regression', 'classification']
 
-        problem_type_activations = {
-            "generic": "relu",
-            "regression": "linear",
-            "classification": "sigmoid"
-        }
+        # Create network
+        self.network = tf.keras.Sequential(
+            [
+                self._initialise_res_block(
+                    dropout_rate,
+                    kernel_size,
+                    layer_filters,
+                    layer_idx,
+                    n_filters,
+                    padding_type,
+                    problem_type,
+                )
+                for layer_idx, layer_filters in enumerate(n_filters)
+            ]
+        )
 
-        # Build network
-        model = tf.keras.Sequential()
-        for layer_idx, layer_filters in enumerate(n_filters):
-            if layer_idx + 1 == len(n_filters):
-                layer_activation = problem_type_activations.get(problem_type)
-            else:
-                layer_activation = 'relu'
-            residual_block = TemporalResidualBlock(
-                dilation=2 ** layer_idx,
-                n_filters=layer_filters,
-                kernel_size=kernel_size,
-                padding_type=padding_type,
-                dropout_rate=dropout_rate,
-                final_activation=layer_activation,
-                random_seed=DEFAULT_RANDOM_SEED * (layer_idx + 1)
-            )
-            model.add(residual_block)
-        self.network = model
+    def _initialise_res_block(self, dropout_rate, kernel_size, layer_filters, layer_idx, n_filters, padding_type,
+                              problem_type):
+        layer_activation = self._get_activation(layer_idx, n_filters, problem_type)
+        return TemporalResidualBlock(
+            dilation=2 ** layer_idx,
+            n_filters=layer_filters,
+            kernel_size=kernel_size,
+            padding_type=padding_type,
+            dropout_rate=dropout_rate,
+            final_activation=layer_activation,
+            random_seed=DEFAULT_RANDOM_SEED * (layer_idx + 1),
+            name=f"resblock_{layer_idx}"
+        )
+
+    def _get_activation(self, layer_idx: int, n_filters: Tuple, problem_type: str):
+        return self.problem_type_activations.get(problem_type) if layer_idx + 1 == len(n_filters) else 'relu'
 
     def call(self, inputs, training=None, mask=None):
         return self.network(inputs, training=training)
