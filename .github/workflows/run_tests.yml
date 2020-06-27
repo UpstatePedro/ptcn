@@ -39,6 +39,10 @@ jobs:
       run: |
         poetry config virtualenvs.path ~/.virtualenvs
 
+    - name: Update Poetry pip version
+      run: |
+        poetry run pip install --upgrade pip
+
     - name: Install Dependencies
       run: poetry install
 
