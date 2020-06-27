@@ -98,6 +98,6 @@ class TemporalResidualBlock(tf.keras.layers.Layer):
 
         if initial_inputs.shape[-1] != x.shape[-1]:
             initial_inputs = self.shape_regulator(initial_inputs)
-        assert initial_inputs.shape == x.shape
+        assert initial_inputs.shape[-1] == x.shape[-1], f"initial shape {initial_inputs.shape} does not match x shape {x.shape}"
 
         return self.final_activation(initial_inputs + x)
