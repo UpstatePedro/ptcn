@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ptcn"
-version = "0.1.2"
+version = "0.1.3"
 description = "TF2 implementation of a Temporal Convolutional Network with a probabilistic twist"
 license = "GPL-3.0-only"
 authors = ["UpstatePedro"]
