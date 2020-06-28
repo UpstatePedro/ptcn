@@ -68,7 +68,7 @@ class GenericTemporalConvNet(tf.keras.Model):
         )
 
     def _get_activation(self, layer_idx: int, n_filters: Tuple, problem_type: str):
-        return self.problem_type_activations.get(problem_type) if layer_idx + 1 == len(n_filters) else 'relu'
+        return self.problem_type_activations.get(problem_type) if layer_idx + 1 == len(n_filters) else 'linear'
 
     def call(self, inputs, training=None, mask=None):
         return self.network(inputs, training=training)

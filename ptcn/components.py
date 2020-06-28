@@ -51,11 +51,11 @@ class TemporalResidualBlock(tf.keras.layers.Layer):
             strides=1,
             padding=padding_type,
             dilation_rate=dilation,
-            activation='relu',
+            activation='tanh',
             kernel_initializer=initialiser
         )
         self.norm_conv_1 = tfa.layers.WeightNormalization(self.conv_1)
-        self.activation_1 = layers.Activation('relu')
+        self.activation_1 = layers.Activation('tanh')
         self.dropout_1 = layers.Dropout(rate=dropout_rate, seed=self.random_seed)
 
         # Second block
@@ -65,11 +65,11 @@ class TemporalResidualBlock(tf.keras.layers.Layer):
             strides=1,
             padding=padding_type,
             dilation_rate=dilation,
-            activation='relu',
+            activation='tanh',
             kernel_initializer=initialiser
         )
         self.norm_conv_2 = tfa.layers.WeightNormalization(self.conv_2)
-        self.activation_2 = layers.Activation('relu')
+        self.activation_2 = layers.Activation('tanh')
         self.dropout_2 = layers.Dropout(rate=dropout_rate, seed=self.random_seed)
 
         # Correct sizing
@@ -79,7 +79,7 @@ class TemporalResidualBlock(tf.keras.layers.Layer):
             strides=1,
             padding='same',
             dilation_rate=1,
-            activation='relu',
+            activation='linear',
             kernel_initializer=initialiser
         )
 

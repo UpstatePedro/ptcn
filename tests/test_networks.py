@@ -77,3 +77,6 @@ def test_generic_call_probabilistic():
 #     tcn = GenericTemporalConvNet(n_filters=(10, 20, 50, 10, 1), problem_type='classification')
 #     tcn.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mae')
 #     tcn.fit(dataset, epochs=10, steps_per_epoch=40)
+#     y_hat = tcn.predict(features)
+#     print("***************")
+#     print(y_hat.min())
